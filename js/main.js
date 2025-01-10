@@ -1,7 +1,7 @@
 // JavaScript to set a Christmas countdown timer
 function Countdown() {
 
-	const christmasDate = new Date("Dec 25, 2024 00:00:00").getTime();
+	const christmasDate = new Date("Dec 25, 2025 00:00:00").getTime();
 
 	const x = setInterval(function () {
 		const now = new Date().getTime();
