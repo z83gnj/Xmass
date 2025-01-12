@@ -6,9 +6,9 @@ const monthNames = [
 
 // Visszaszámlálási dátumok
 const countdownDates = [
-    { month: 1, day: 11 },  // Január 15.
-    { month: 2, day: 10 }, // Február 10.
-    { month: 3, day: 20 }, // Március 20.
+    { smonth: 1, month: 1, day: 13 },  // Január 15.
+    { smonth: 2, month: 2, day: 10 }, // Február 10.
+    { smonth: 3, month: 3, day: 20 }, // Március 20.
     { month: 4, day: 25 }, // Április 25.
     { month: 5, day: 5 },  // Május 5.
     { month: 6, day: 30 }, // Június 30.
