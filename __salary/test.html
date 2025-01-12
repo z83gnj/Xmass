@@ -13,22 +13,38 @@
         }
         .counters {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
             gap: 20px;
         }
+        .highlighted {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .counter-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
         .counter {
-            flex: 1 1 calc(33% - 20px); /* Két oszlop */
             box-sizing: border-box;
-            margin-bottom: 20px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background: #fff;
+            width: 150px;
+            text-align: center;
         }
         .counter.expired {
-            background: #d4edda; /* Zöld háttér a lejárt dátumokhoz */
+            background: #d4edda;
             color: #155724;
             border-color: #c3e6cb;
+        }
+        .counter.highlighted {
+            border: 2px solid #007bff;
+            background: #e7f1ff;
         }
         h1 {
             text-align: center;
@@ -37,23 +53,23 @@
 </head>
 <body>
     <h1>Fizetés Visszaszámlálók</h1>
+    <div id="next-payment" class="highlighted"></div>
     <div id="counters" class="counters"></div>
 
     <script>
-        // Visszaszámlálási dátumok minden hónapra
         const countdownDates = [
-            { smonth: 1, month: 2, day: 5 },  // Január 15.
-            { smonth: 2, month: 3, day: 5 }, // Február 10.
-            { smonth: 3, month: 4, day: 5 }, // Március 20.
-            { smonth: 4, month: 5, day: 5 }, // Április 25.
-            { smonth: 5, month: 6, day: 5 },  // Május 5.
-            { smonth: 6, month: 7, day: 5 }, // Június 30.
-            { smonth: 7, month: 8, day: 5 }, // Július 15.
-            { smonth: 8, month: 9, day: 5 }, // Augusztus 10.
-            { smonth: 9, month: 10, day: 5 }, // Szeptember 25.
-            { smonth: 10, month: 11, day: 5 }, // Október 20.
-            { smonth: 11, month: 12, day: 5 },  // November 5.
-            { smonth: 12, month: 12, day: 20 }  // December 31.
+            { smonth: 1, month: 1, day: 5 }, 
+            { smonth: 2, month: 3, day: 5 }, 
+            { smonth: 3, month: 4, day: 5 }, 
+            { smonth: 4, month: 5, day: 5 }, 
+            { smonth: 5, month: 6, day: 5 }, 
+            { smonth: 6, month: 7, day: 5 }, 
+            { smonth: 7, month: 8, day: 5 }, 
+            { smonth: 8, month: 9, day: 5 }, 
+            { smonth: 9, month: 10, day: 5 }, 
+            { smonth: 10, month: 11, day: 5 }, 
+            { smonth: 11, month: 12, day: 5 }, 
+            { smonth: 12, month: 12, day: 20 } 
         ];
 
         const monthNames = [
@@ -62,17 +78,18 @@
         ];
 
         const countersDiv = document.getElementById('counters');
+        const nextPaymentDiv = document.getElementById('next-payment');
 
         function updateCounters() {
             countersDiv.innerHTML = '';
+            nextPaymentDiv.innerHTML = ''; // Töröljük a legközelebbi fizetés kiemelését
             const now = new Date();
+            let nextCounter = null;
 
             countdownDates.forEach(({ smonth, month, day }, index) => {
                 const currentYear = now.getFullYear();
                 let targetDate = new Date(currentYear, month - 1, day);
-
                 const diff = targetDate - now;
-
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -89,16 +106,25 @@
                 } else {
                     counter.innerHTML = `
                         <h2>${monthNames[smonth - 1]}i fizetés:</h2>
-						<h3>2025. ${monthNames[month - 1]} ${day}. nap</h3>
+                        <h3>2025. ${monthNames[month - 1]} ${day}. nap</h3>
                         <p>${days} nap, ${hours} óra, ${minutes} perc, ${seconds} másodperc</p>
                     `;
+                    // Kiválasztjuk a legközelebbi dátumot
+                    if (!nextCounter || targetDate < new Date(nextCounter.date)) {
+                        nextCounter = { element: counter, date: targetDate };
+                    }
                 }
 
                 countersDiv.appendChild(counter);
             });
+
+            // Kiemeljük a legközelebbi dátumot
+            if (nextCounter) {
+                nextPaymentDiv.innerHTML = `Következő fizetés: ${monthNames[nextCounter.date.getMonth()]} ${nextCounter.date.getDate()}.`;
+                nextCounter.element.classList.add('highlighted');
+            }
         }
 
-        // Frissítés minden másodpercben
         setInterval(updateCounters, 1000);
         updateCounters();
     </script>

@@ -10,6 +10,23 @@ h1 {
     text-align: center;
 }
 
+.highlight {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.first-date {
+    flex: 1 1 calc(33% - 20px); /* Két oszlop */
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+}
+
 /* Visszaszámlálók elrendezése */
 .counters {
     display: flex;
@@ -18,7 +35,7 @@ h1 {
 }
 
 .counter {
-    flex: 1 1 calc(50% - 20px); /* Két oszlop */
+    flex: 1 1 calc(33% - 20px); /* Két oszlop */
     box-sizing: border-box;
     margin-bottom: 20px;
     padding: 10px;
@@ -37,6 +54,13 @@ h1 {
     background: #ffe8a1; /* Narancs háttér fizetve állapothoz */
     color: #8a6d3b;
     border-color: #ffdd77;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center; /* Horizontálisan középre */
+    align-items: center; /* Vertikálisan középre */
+    margin-top: 20px; /* Ha szükséges, margót adhatsz hozzá */
 }
 
 /* Pénzeső tartó */
