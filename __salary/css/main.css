@@ -1,0 +1,74 @@
+/* Alap stílusok */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+}
+
+/* Visszaszámlálók elrendezése */
+.counters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.counter {
+    flex: 1 1 calc(50% - 20px); /* Két oszlop */
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.counter.payment-day {
+    background: #d4edda; /* Zöld háttér fizetésnap esetén */
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.counter.paid {
+    background: #ffe8a1; /* Narancs háttér fizetve állapothoz */
+    color: #8a6d3b;
+    border-color: #ffdd77;
+}
+
+/* Pénzeső tartó */
+#money-rain {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+/* Pénzeső elemek */
+.money {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-image: url('../media/money.jpg'); /* Pénzes kép URL-je */
+    background-size: cover;
+    animation: fall infinite linear;
+}
+
+/* Esés animáció */
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
