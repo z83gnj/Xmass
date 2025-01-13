@@ -1,41 +1,38 @@
-// Hónapnevek
 const monthNames = [
     'Január', 'Február', 'Március', 'Április', 'Május', 'Június',
     'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'
 ];
 
-// Visszaszámlálási dátumok
 const countdownDates = [
-    { smonth: 1, month: 1, day: 12 },  // Január 15.
-    { smonth: 2, month: 3, day: 5 }, // Február 10.
-    { smonth: 3, month: 4, day: 5 }, // Március 20.
-    { smonth: 4, month: 5, day: 5 }, // Április 25.
-    { smonth: 5, month: 6, day: 5 },  // Május 5.
-    { smonth: 6, month: 8, day: 5 }, // Június 30.
-    { smonth: 7, month: 8, day: 5 }, // Július 15.
-    { smonth: 8, month: 9, day: 5 }, // Augusztus 10.
-    { smonth: 9, month: 10, day: 5 }, // Szeptember 25.
-    { smonth: 10, month: 11, day: 5 }, // Október 20.
-    { smonth: 11, month: 12, day: 5 },  // November 5.
-    { smonth: 12, month: 12, day: 15 }  // December 31.
+    { smonth: 1, month: 2, day: 5 },
+    { smonth: 2, month: 3, day: 5 },
+    { smonth: 3, month: 4, day: 5 },
+    { smonth: 4, month: 5, day: 5 },
+    { smonth: 5, month: 6, day: 5 },
+    { smonth: 6, month: 8, day: 5 },
+    { smonth: 7, month: 8, day: 5 },
+    { smonth: 8, month: 9, day: 5 },
+    { smonth: 9, month: 10, day: 5 },
+    { smonth: 10, month: 11, day: 5 },
+    { smonth: 11, month: 12, day: 5 },
+    { smonth: 12, month: 12, day: 15 }
 ];
 
 const highlightDiv = document.getElementById('highlight');
-
 const countersDiv = document.getElementById('counters');
 const moneyRainDiv = document.getElementById('money-rain');
 
-// Folyamatos pénzeső indítása
+// Start money rain
 function startMoneyRain() {
     setInterval(() => {
         const money = document.createElement('div');
         money.className = 'money';
-        money.style.left = `${Math.random() * 100}vw`; // Véletlenszerű vízszintes pozíció
-        money.style.animationDuration = `${Math.random() * 2 + 3}s`; // Véletlenszerű animációs idő
-        money.style.animationDelay = `${Math.random()}s`; // Véletlenszerű késleltetés
+        money.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+        money.style.animationDuration = `${Math.random() * 2 + 3}s`; // Random anim time
+        money.style.animationDelay = `${Math.random()}s`; // Random delay
         moneyRainDiv.appendChild(money);
 
-        // Az elemek automatikusan eltávolításra kerülnek
+        // Autoremove of the elements
         setTimeout(() => {
             money.remove();
         }, 10000);
@@ -44,8 +41,8 @@ function startMoneyRain() {
 function highlight(){
     highlightDiv.innerHTML = '';
     const now = new Date();
-    let isFirstDate = true; // Ellenőrizni, hogy fizetésnap van-e
-    let isPaymentDay = false; // Ellenőrizni, hogy fizetésnap van-e
+    let isFirstDate = true;
+    let isPaymentDay = false;
 
     for (let i = 0; i < countdownDates.length; i++) {
         const { smonth, month, day } = countdownDates[i];
@@ -56,7 +53,6 @@ function highlight(){
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
         if (now < targetDate && isFirstDate) {
             highsmonth = monthNames[smonth - 1]
@@ -65,9 +61,7 @@ function highlight(){
             highdays = days
             highhours = hours
             highminutes = minutes
-            highseconds = seconds
-   
-            isFirstDate = false;
+            break;
         } else if (
             now.getFullYear() === targetDate.getFullYear() &&
             now.getMonth() === targetDate.getMonth() &&
@@ -77,24 +71,17 @@ function highlight(){
             highsmonth = monthNames[smonth - 1]
             highmonth = monthNames[month - 1]
             highday = day
-            // high.classList.add('first-date-salary');
-            
-        } 
-
-        // highlightDiv.appendChild(high);
-
-        if (!isFirstDate) {
             break;
-        }
+        } 
     }
     const high = document.createElement('div');
-    high.className = 'highlight';
-    high.classList.add('first-date');
+    high.className = 'high';
 
     if (isPaymentDay) {
+        high.classList.add('payment-day');
         high.innerHTML = `
-
         <h1>Fizetésnap!🎉</h1>
+        <h2>Ma jön a ${highsmonth}i fizetés!</h2>
         <div class="image-container">
             <a href="https://www.ikea.com/hu/hu/" target="_blank">
                 <img src="https://www.ikea.com/global/assets/logos/brand/ikea.svg" alt="Gyerünk vásárolni!">
@@ -102,24 +89,24 @@ function highlight(){
         </div>
         `;
     } else {
-
     high.innerHTML = `
-             <h2>${highsmonth}i fizetés</h2>
-             <h3>${highmonth} ${highday}.</h3>
-             <p> másodperc</p>
-         `;
+                <h2>Következő fizetés nap</h2>
+                <h1>${highdays} nap, ${highhours} óra, ${highminutes} perc múlva lesz,</h1>
+                                <h2>${highmonth} hó ${highday}. napján.</h2>
+            `;
     }
-
     highlightDiv.appendChild(high);
-
+    
+    // Start money rain if it is salary day
+    if (isPaymentDay && !moneyRainDiv.classList.contains('active')) {
+        moneyRainDiv.classList.add('active'); // Start only once
+        startMoneyRain();
+    }
 }
 
-
-// Számlálók frissítése
 function updateCounters() {
     countersDiv.innerHTML = '';
     const now = new Date();
-    let isPaymentDay = false; // Ellenőrizni, hogy fizetésnap van-e
 
     countdownDates.forEach(({ smonth, month, day }) => {
         const currentYear = now.getFullYear();
@@ -128,53 +115,39 @@ function updateCounters() {
         const diff = targetDate - now;
 
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
         const counter = document.createElement('div');
         counter.className = 'counter';
 
-        if (
-            now.getFullYear() === targetDate.getFullYear() &&
-            now.getMonth() === targetDate.getMonth() &&
-            now.getDate() === targetDate.getDate()
-        ) {
-            isPaymentDay = true; // Fizetésnap van
-            counter.classList.add('payment-day');
+        if (now <= targetDate.setDate(targetDate.getDate() + 1)) {
+            if (days < 0){
+                addHTML = `
+                    <h3>0 nap van hátra</h3>
+                `;
+            } else {
+                addHTML =  `
+                <h3>${days} nap van hátra</h3>
+                `;
+            }
+        
             counter.innerHTML = `
                 <h2>${monthNames[smonth - 1]}i fizetés</h2>
-                <h3>${monthNames[month - 1]} ${day}. nap</h3>
-                <h1>Fizetésnap!🎉</h1>
-            `;
-        } else if (now > targetDate) {
+                <p><u><b>Érkezik:</b></u> ${monthNames[month - 1]} hó ${day}. napján</p>
+                ` + addHTML;
+        } else {
             counter.classList.add('paid');
             counter.innerHTML = `
                 <h2>${monthNames[smonth - 1]}i fizetés</h2>
-                <h3>${monthNames[month - 1]} ${day}. nap</h3>
-                <p>Fizetve</p>
-            `;
-        } else {
-            counter.innerHTML = `
-                <h2>${monthNames[smonth - 1]}i fizetés</h2>
-                <h3>${monthNames[month - 1]} ${day}. nap</h3>
-                <p>${days} nap, ${hours} óra, ${minutes} perc, ${seconds} másodperc</p>
+                <h1>Fizetve!</h1>
             `;
         }
-
         countersDiv.appendChild(counter);
     });
-
-    // Pénzeső indítása csak fizetésnapon
-    if (isPaymentDay && !moneyRainDiv.classList.contains('active')) {
-        moneyRainDiv.classList.add('active'); // Egyszer indítsuk el
-        startMoneyRain();
-    }
 }
 
-// Számlálók frissítése minden másodpercben
-setInterval(updateCounters, 1000);
-setInterval(highlight, 1000);
+// Refresh counter every 30 secounds
+//setInterval(updateCounters, 30000);
+setInterval(highlight, 300000);
 
 updateCounters();
 highlight();
